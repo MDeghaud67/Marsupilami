@@ -1,0 +1,29 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <h1>Marsupilami</h1>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="nav navbar-nav">
+        <li routerLinkActive="active">
+          <a routerLink="/">Home</a>
+        </li>
+        <li routerLinkActive="active" *ngIf="!auth.isLoggedIn()">
+          <a routerLink="/login">Login / sign up</a>
+        </li>
+        <li routerLinkActive="active" *ngIf="auth.isLoggedIn()">
+          <a routerLink="">Informations</a>
+        </li>
+        <li routerLinkActive="active" *ngIf="auth.isLoggedIn()">
+          <a (click)="auth.logout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+

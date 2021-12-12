@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { InfoComponent } from './info/info.component';
+import { UserEditComponent } from './user-edit/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { InfoComponent } from './info/info.component';
     HomeComponent,
     RegisterComponent,
     InfoComponent,
+    UserEditComponent,
   ],
   imports: [
     BrowserModule,

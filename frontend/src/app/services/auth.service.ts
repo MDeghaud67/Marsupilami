@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { Router } from '@angular/router';
@@ -38,6 +38,8 @@ export interface TokenPayload {
 @Injectable()
 export class AuthService {
     private token: string = '';
+    baseUrl: string = 'http://localhost:3000/api';
+    headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     constructor(private http: HttpClient, private router: Router){
 

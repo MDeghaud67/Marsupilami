@@ -1,52 +1,64 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+var passport = require('passport');
+var mongoose = require('mongoose');
 
 const User = require('../models/User');
 
 exports.register = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
-            const user = new User({
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                age: req.body.age,
-                family: req.body.family,
-                race: req.body.race,
-                food: req.body.food,
-                email: req.body.email,
-                password: hash
-            });
+            const user = new User();
+            user.firstName = req.body.firstName,
+            user.lastName = req.body.lastName,
+            user.age = req.body.age,
+            user.family = req.body.family,
+            user.race = req.body.race,
+            user.food = req.body.food,
+            user.email = req.body.email
+                //password: hash
+            user.setPassword(req.body.password);
+            
+            User.findOne({email:req.body.email}).then(user1=>{
+                if(user1){
+                  return res.status(401).json({
+                    message: "User Already Exist"
+                  })
+                }
             user.save()
-                .then(error => res.status(201).json({ message: 'Utilisateur créé !' }))
+                .then(error => {
+                    var token;
+                    token = user.generateJwt();
+                    res.status(201).json({ "token" : token })
+                })
                 .catch(error => res.status(400).json({ error }));
         })
+    })
         .catch(error => res.status(500).json({ error }));
 };
 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
-        .then(user => {
-            if(!user){
-                return res.status(401).json({ message: 'Utilisateur non trouvé!' });
-            }
-            bcrypt.compare(req.body.password, user.password)
-                .then(valid => {
-                    if(!valid){
-                        return res.status(401).json({ message: 'Mot de passe incorrect!' });
-                    }
-                    res.status(200).json({
-                        userId: user._id,
-                        token: jwt.sign(
-                            { userId: user._id },
-                            'RANDOM_TOKEN_SECRET',
-                            { expiresIn: '24h' }
-                        )
-                    })
-                })
-                .catch(error => res.status(500).json({ error }))
-        })
-        .catch(error => res.status(500).json({ error }));
-
+    passport.authenticate('local', function(err, user, info){
+        var token;
+    
+        // If Passport throws/catches an error
+        if (err) {
+          res.status(404).json(err);
+          return;
+        }
+    
+        // If a user is found
+        if(user){
+          token = user.generateJwt();
+          res.status(200);
+          res.json({
+            "token" : token
+          });
+        } else {
+          // If user is not found
+          res.status(401).json(info);
+        }
+      })(req, res);
 };
 
 exports.getOne = (req, res, next) => {

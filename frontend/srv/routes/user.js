@@ -5,6 +5,7 @@ const userCtrl = require('../controllers/user');
 
 router.post('/register', userCtrl.register);
 router.post('/login', userCtrl.login);
+router.get('/home', auth, userCtrl.readInfo);
 router.get('/:id', userCtrl.getOne);
 router.put('/:id', userCtrl.update);
 

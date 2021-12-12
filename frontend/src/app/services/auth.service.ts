@@ -76,7 +76,7 @@ export class AuthService {
         }
     }
 
-    private request(method: 'post'|'get', type: 'login'|'register'|'home', user?: TokenPayload): Observable<any> {
+    private request(method: 'post'|'get', type: 'login'|'register'|'info', user?: TokenPayload): Observable<any> {
       let base;
 
       if (method === 'post') {
@@ -111,7 +111,7 @@ export class AuthService {
         this.router.navigateByUrl('/');
     }
 
-    public home(): Observable<any> {
-      return this.request('get', 'home');
+    public info(): Observable<any> {
+      return this.request('get', 'info');
     }
 }

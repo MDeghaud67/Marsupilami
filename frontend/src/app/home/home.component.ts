@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, UserDetails } from '../services/auth.service';
 
 //import { User } from '../../../srv/models/User';
 
@@ -9,16 +8,11 @@ import { AuthService, UserDetails } from '../services/auth.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  details?: UserDetails;
+  //users: User[];
 
-  constructor(private auth: AuthService) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.auth.home().subscribe(user => {
-      this.details = user;
-    }, (err) => {
-      console.error(err);
-    });
   }
 
 }

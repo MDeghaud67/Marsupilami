@@ -78,7 +78,7 @@ export class AuthService {
         }
     }
 
-    private request(method: 'post'|'get', type: 'login'|'register'|'info', user?: TokenPayload): Observable<any> {
+    private request(method: 'post'|'get'|'put', type: 'login'|'register'|'info'|'update'|'getOne', user?: TokenPayload): Observable<any> {
       let base;
 
       if (method === 'post') {
@@ -115,5 +115,12 @@ export class AuthService {
 
     public info(): Observable<any> {
       return this.request('get', 'info');
+    }
+    public update(user: TokenPayload): Observable<any> {
+      return this.request('put', 'update', user);
+    }
+
+    public getUserById(id: number): Observable<any> {
+      return this.request('get', 'getOne')
     }
 }

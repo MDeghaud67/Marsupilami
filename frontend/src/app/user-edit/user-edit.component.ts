@@ -21,7 +21,12 @@ export class UserEditComponent implements OnInit {
   ngOnInit(): void {
     this.updateUser();
     let id = this.actRoute.snapshot.paramMap.get('id');
-    this.getUser(id);
+    if(!id){
+      alert("Invalid action.")
+      this.router.navigate(['info']);
+      return;
+    }
+    //this.getUser(id);
     this.editForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
@@ -32,9 +37,9 @@ export class UserEditComponent implements OnInit {
     })
   }
 
-  getUser(id) {
+  /*getUser(id) {
     this.authService.getUserDetails(id).subscribe(data => {
-      this.editForm.setValue({
+      this.editForm?.setValue({
         firstName: data['firstName'],
         lastName: data['lastName'],
         age: data['age'],
@@ -43,31 +48,37 @@ export class UserEditComponent implements OnInit {
         food: data['food']
       });
     });
-  }
+  }*/
 
   updateUser() {
     this.editForm = this.fb.group({
-      name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
-      designation: ['', [Validators.required]],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]]
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      age: ['', [Validators.required]],
+      family: ['', [Validators.required]],
+      race: ['', [Validators.required]],
+      food: ['', [Validators.required]],
     })
   }
 
   onSubmit() {
     this.submitted = true;
-    if (!this.editForm.valid) {
+    if (!this.editForm?.valid) {
       return false;
     } else {
       if (window.confirm('Are you sure?')) {
         let id = this.actRoute.snapshot.paramMap.get('id');
-        this.authService.updateUser(id, this.editForm.value)
+        this.authService.update(this.editForm.value)
           .subscribe(res => {
-            this.router.navigateByUrl('/employees-list');
+            this.router.navigateByUrl('info');
             console.log('Content updated successfully!')
           }, (error) => {
             console.log(error)
-          })
+          });
+          /*this.authService.getUserById(id?)
+            .subscribe(data => {
+              this.editForm?.setValue(data);
+            })*/
       }
     }
   }
